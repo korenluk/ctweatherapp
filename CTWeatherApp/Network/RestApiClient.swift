@@ -9,7 +9,15 @@
 import Foundation
 
 final class RestApiClient {
-  
-    //Client pro volání REST API
+    let session = URLSession.shared
     
+    func request<T: Codable>(url: URL) async throws -> T {
+        let (data, _) = try await session.data(from: url)
+        return try decode(data: data)
+    }
+    
+    private func decode<T:Codable>(data: Data) throws -> T {
+        let decoder = JSONDecoder()
+        return try decoder.decode(T.self, from: data)
+    }
 }
