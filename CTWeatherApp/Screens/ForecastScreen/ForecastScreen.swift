@@ -26,6 +26,28 @@ struct ForecastScreen: View {
                 TemperatureView(viewType: .maxTemp, temperature: viewModel.maxTemperature)
             }
             
+            Button {
+                
+            } label: {
+                Text("Praha")
+            }
+            .buttonStyle(PrimaryButtonStyle())
+            
+            Button {
+                
+            } label: {
+                Text("New York")
+            }
+            .buttonStyle(PrimaryButtonStyle())
+            
+            Button {
+                
+            } label: {
+                Text("Aktuální poloha")
+            }
+            .buttonStyle(PrimaryButtonStyle())
+
+            
             Spacer()
         }
         .padding(.horizontal, 16)
