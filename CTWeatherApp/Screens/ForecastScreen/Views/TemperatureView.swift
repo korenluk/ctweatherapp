@@ -36,14 +36,12 @@ struct TemperatureView: View {
                 Text(viewType.title)
                     .font(.system(size: 20))
                     
-                
-                Text(temperature.description)
+                Text(Measurement(value: temperature, unit: UnitTemperature.celsius).description)
                     .font(.system(size: 30).bold())
             }
             .padding()
             
             Spacer()
-            
         }
         .overlay {
             RoundedRectangle(cornerRadius: 10)
