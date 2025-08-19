@@ -16,6 +16,7 @@ final class ForecastViewModel: ObservableObject {
     @Published var isLoading = false
     @Published var city = ""
     @Published var country = ""
+    @Published var errorMessage: String?
     
     var minTemperatures: [Double] = []
     var minTemperature: Double {
@@ -56,7 +57,7 @@ final class ForecastViewModel: ObservableObject {
             city = place?.first?.locality ?? "Unknown city"
             country = place?.first?.country ?? "Unknown country"
         } catch {
-            print(error)
+            errorMessage = error.localizedDescription
         }
         
         isLoading = false

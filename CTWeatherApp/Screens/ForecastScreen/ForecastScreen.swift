@@ -67,6 +67,19 @@ struct ForecastScreen: View {
             await viewModel.loadLocation(latitude: 50.087, longitude: 14.421)
         }
         .loading(viewModel.isLoading)
+        .alert(viewModel.errorMessage ?? "", isPresented: viewModel.errorMessage.binding()) {
+            Button {
+                
+            } label: {
+                Text("Ok")
+            }
+            
+            Button {
+                exit(0)
+            } label: {
+                Text("Vypnout")
+            }
+        }
     }
     
 }
