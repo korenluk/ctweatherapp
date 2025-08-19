@@ -18,7 +18,9 @@ struct HorizontalCalendarView: View {
             HStack(spacing: 0) {
                 ForEach(Array(dates.enumerated()), id: \.0) { index, date in
                     dateItem(index: index, date: date)
-                        .padding(.horizontal, 8)
+                        .padding(.horizontal, 4)
+                        .padding(.leading, index == 0 ? 12 : 0)
+                        .padding(.trailing, index == dates.count - 1 ? 12 : 0)
                 }
             }
         }

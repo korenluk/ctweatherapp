@@ -26,7 +26,7 @@ public struct LoadingView<Content: View>: View {
                 ProgressView()
                     .controlSize(.large)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .background(.white)
+                    .background(.white.opacity(0.5))
                     .edgesIgnoringSafeArea(.all)
             }
         }

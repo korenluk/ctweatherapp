@@ -14,6 +14,6 @@ struct PrimaryButtonStyle: ButtonStyle {
         configuration.label
             .foregroundStyle(.black)
             .frame(maxWidth: .infinity, minHeight: 48)
-            .background(.gray)
+            .background(.gray.opacity(0.5))
     }
 }
