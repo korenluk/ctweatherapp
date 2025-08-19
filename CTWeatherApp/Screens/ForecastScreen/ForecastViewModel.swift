@@ -12,6 +12,7 @@ import Foundation
 final class ForecastViewModel: ObservableObject {
     @Published var dates: [DateVO] = []
     @Published var selectedIndex = 0
+    @Published var isLoading = false
     
     var minTemperatures: [Double] = []
     var minTemperature: Double {
@@ -38,6 +39,8 @@ final class ForecastViewModel: ObservableObject {
     }
     
     func task() async {
+        isLoading = true
+        
         do {
             let response = try await dataProvider.getData()
 
@@ -47,6 +50,8 @@ final class ForecastViewModel: ObservableObject {
         } catch {
             print(error)
         }
+        
+        isLoading = false
     }
     
     func onIndexChange(_ index: Int) {

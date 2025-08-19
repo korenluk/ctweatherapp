@@ -32,6 +32,7 @@ struct ForecastScreen: View {
         .task {
             await viewModel.task()
         }
+        .loading(viewModel.isLoading)
     }
     
 }
