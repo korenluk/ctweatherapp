@@ -12,7 +12,7 @@ struct CTWeatherAppApp: App {
     
     var body: some Scene {
         WindowGroup {
-            ForecastScreen()
+            ForecastScreen(viewModel: ForecastViewModel(dataProvider: WeatherDataProvider()))
         }
     }
 }
