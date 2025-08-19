@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+
 struct TemperatureView: View {
     
     enum ViewType {
@@ -25,9 +26,32 @@ struct TemperatureView: View {
     }
     
     let viewType: ViewType
+    let temperature: Double
     
     var body: some View {
-        Text("View pro zobrazení min/max teploty")
+        HStack {
+            Spacer()
+            
+            VStack {
+                Text(viewType.title)
+                    .font(.system(size: 20))
+                    
+                
+                Text(temperature.description)
+                    .font(.system(size: 30).bold())
+            }
+            .padding()
+            
+            Spacer()
+            
+        }
+        .overlay {
+            RoundedRectangle(cornerRadius: 10)
+                .strokeBorder(Color.blue.opacity(0.5), lineWidth: 2)
+        }
     }
-    
+}
+
+#Preview {
+    TemperatureView(viewType: .maxTemp, temperature: 20.5)
 }
