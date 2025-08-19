@@ -9,11 +9,17 @@ import Foundation
 
 
 final class WeatherDataProvider {
-    private let url = URL(string: "https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&daily=temperature_2m_max&daily=temperature_2m_min")!
+    private let baseUrl = URL(string: "https://api.open-meteo.com/v1/forecast?daily=temperature_2m_max&daily=temperature_2m_min")!
     
     private let client = RestApiClient()
     
-    func getData() async throws -> WeatherResponse {
-        try await client.request(url: url)
+    func getData(latitude: Double, longitude: Double) async throws -> WeatherResponse {
+        let url = baseUrl.appending(
+            queryItems: [
+                URLQueryItem(name: "latitude", value: latitude.description),
+                URLQueryItem(name: "longitude", value: longitude.description),
+            ]
+        )
+        return try await client.request(url: url)
     }
 }

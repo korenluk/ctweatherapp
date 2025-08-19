@@ -12,47 +12,59 @@ struct ForecastScreen: View {
     @ObservedObject var viewModel: ForecastViewModel
     
     var body: some View {
-        VStack {
+        VStack(spacing: 32) {
             HorizontalCalendarView(dates: viewModel.dates) { index in
                 viewModel.onIndexChange(index)
             }
             .frame(height: 70)
             
-            Spacer()
+            VStack {
+                Text(viewModel.city)
+                    .font(.headline)
+                
+                Text(viewModel.country)
+                    .font(.subheadline)
+            }
             
             HStack(spacing: 8) {
                 TemperatureView(viewType: .minTemp, temperature: viewModel.minTemperature)
                 
                 TemperatureView(viewType: .maxTemp, temperature: viewModel.maxTemperature)
             }
+            .padding(.horizontal, 16)
             
-            Button {
+            VStack {
+                Button {
+                    Task {
+                        await viewModel.loadLocation(latitude: 50.087, longitude: 14.421)
+                    }
+                } label: {
+                    Text("Praha")
+                }
+                .buttonStyle(PrimaryButtonStyle())
                 
-            } label: {
-                Text("Praha")
-            }
-            .buttonStyle(PrimaryButtonStyle())
-            
-            Button {
+                Button {
+                    Task {
+                        await viewModel.loadLocation(latitude: 40.73, longitude: -73.93)
+                    }
+                } label: {
+                    Text("New York")
+                }
+                .buttonStyle(PrimaryButtonStyle())
                 
-            } label: {
-                Text("New York")
+                Button {
+                    viewModel.onCurrentLocationButtonTap()
+                } label: {
+                    Text("Aktuální poloha")
+                }
+                .buttonStyle(PrimaryButtonStyle())
             }
-            .buttonStyle(PrimaryButtonStyle())
-            
-            Button {
-                
-            } label: {
-                Text("Aktuální poloha")
-            }
-            .buttonStyle(PrimaryButtonStyle())
-
+            .padding(.horizontal, 16)
             
             Spacer()
         }
-        .padding(.horizontal, 16)
         .task {
-            await viewModel.task()
+            await viewModel.loadLocation(latitude: 50.087, longitude: 14.421)
         }
         .loading(viewModel.isLoading)
     }
@@ -60,5 +72,5 @@ struct ForecastScreen: View {
 }
 
 #Preview {
-    ForecastScreen(viewModel: ForecastViewModel(dataProvider: WeatherDataProvider()))
+    ForecastScreen(viewModel: ForecastViewModel(dataProvider: WeatherDataProvider(), locationManager: LocationManager()))
 }

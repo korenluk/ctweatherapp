@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CoreLocation
 
 
 @MainActor
@@ -13,6 +14,8 @@ final class ForecastViewModel: ObservableObject {
     @Published var dates: [DateVO] = []
     @Published var selectedIndex = 0
     @Published var isLoading = false
+    @Published var city = ""
+    @Published var country = ""
     
     var minTemperatures: [Double] = []
     var minTemperature: Double {
@@ -32,21 +35,26 @@ final class ForecastViewModel: ObservableObject {
         }
     }
     
-    let dataProvider: WeatherDataProvider
+    private let dataProvider: WeatherDataProvider
+    private let locationManager: LocationManager
     
-    init(dataProvider: WeatherDataProvider) {
+    init(dataProvider: WeatherDataProvider, locationManager: LocationManager) {
         self.dataProvider = dataProvider
+        self.locationManager = locationManager
     }
     
-    func task() async {
+    func loadLocation(latitude: Double, longitude: Double) async {
         isLoading = true
         
         do {
-            let response = try await dataProvider.getData()
-
+            let response = try await dataProvider.getData(latitude: latitude, longitude: longitude)
             dates = response.daily.time.compactMap({ DateVoMapper.map(date: Date.getDate(stringDate: $0)) })
             minTemperatures = response.daily.temperatureMin
             maxTemperatures = response.daily.temperatureMax
+            
+            let place = try await CLLocation(latitude: latitude, longitude: longitude).geocode()
+            city = place?.first?.locality ?? "Unknown city"
+            country = place?.first?.country ?? "Unknown country"
         } catch {
             print(error)
         }
@@ -56,5 +64,15 @@ final class ForecastViewModel: ObservableObject {
     
     func onIndexChange(_ index: Int) {
         selectedIndex = index
+    }
+    
+    func onCurrentLocationButtonTap() {
+        locationManager.requestWhenInUseAuthorization()
+        locationManager.startUpdatingLocation()
+        Task {
+            if let location = locationManager.lastLocation {
+                await loadLocation(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
+            }
+        }
     }
 }
